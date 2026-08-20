@@ -1,0 +1,1584 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Lá Thư Tình Yêu • Ngân Hà Tình Yêu ✨</title>
+  
+  <!-- Google Fonts: Playfair Display (Italic) & Montserrat -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ==================== RESET & GLOBAL ==================== */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background: #020007;
+      font-family: 'Montserrat', sans-serif;
+      color: #fff;
+      position: relative;
+    }
+
+    /* Ambient Space Lighting (Deep cosmic nebula background) */
+    .cosmic-nebula {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      background: 
+        radial-gradient(circle at 20% 20%, rgba(245, 158, 11, 0.16) 0%, transparent 40%),
+        radial-gradient(circle at 80% 75%, rgba(147, 51, 234, 0.18) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(236, 72, 153, 0.14) 0%, rgba(15, 23, 42, 0.6) 65%, #020007 100%);
+    }
+
+    /* Canvas for Starfield & Galaxy Stardust */
+    #space-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* Canvas for 3D Galaxy Orbit Tracks & Particles */
+    #galaxy-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    /* Particle Explosion Canvas */
+    #explosion-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 200;
+    }
+
+    /* ==================== FULL WEB VIEWPORT ==================== */
+    .web-viewport {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 10;
+      overflow: hidden;
+      perspective: 1200px;
+    }
+
+    /* ==================== TOP BAR & AUDIO ==================== */
+    .top-bar {
+      position: absolute;
+      top: 24px;
+      left: 32px;
+      right: 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 50;
+    }
+
+    .status-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 18px;
+      background: rgba(255, 255, 255, 0.07);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 30px;
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.95);
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 15px rgba(236, 72, 153, 0.25);
+    }
+
+    .status-tag .pulsing-dot {
+      width: 8px;
+      height: 8px;
+      background: #ff2a85;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #ff2a85, 0 0 20px #00e5ff;
+      animation: neonBlink 1.4s infinite alternate;
+    }
+
+    @keyframes neonBlink {
+      0% { opacity: 0.35; transform: scale(0.8); }
+      100% { opacity: 1; transform: scale(1.25); }
+    }
+
+    .audio-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1.5px solid rgba(255, 255, 255, 0.25);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 20px rgba(236, 72, 153, 0.3);
+      transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .audio-btn:hover {
+      transform: scale(1.12);
+      border-color: #00e5ff;
+      box-shadow: 0 0 25px #00e5ff, 0 0 35px #ff2a85;
+    }
+
+    .audio-btn.playing {
+      animation: rotateVinyl 7s linear infinite;
+      border-color: #ff2a85;
+      box-shadow: 0 0 20px #ff2a85, 0 0 35px #a855f7;
+    }
+
+    @keyframes rotateVinyl {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Floating Zing MP3 Player Panel */
+    .zing-player-panel {
+      position: absolute;
+      top: 75px;
+      right: 32px;
+      width: min(420px, 92vw);
+      height: 140px;
+      border-radius: 20px;
+      overflow: hidden;
+      background: rgba(15, 3, 30, 0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1.5px solid rgba(255, 42, 133, 0.6);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8), 0 0 25px rgba(0, 229, 255, 0.4);
+      z-index: 60;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px) scale(0.95);
+      transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .zing-player-panel.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0) scale(1);
+    }
+
+    .zing-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    /* ==================== 3D GALAXY STAGE ==================== */
+    .galaxy-3d-stage {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      z-index: 20;
+    }
+
+    /* Volumetric Cosmic Heart Bloom */
+    .heart-core-bloom {
+      position: absolute;
+      width: min(520px, 68vw);
+      height: min(520px, 68vw);
+      background: radial-gradient(circle, rgba(255, 42, 133, 0.38) 0%, rgba(168, 85, 247, 0.22) 38%, rgba(0, 229, 255, 0.12) 60%, transparent 75%);
+      border-radius: 50%;
+      filter: blur(52px);
+      pointer-events: none;
+      z-index: 10;
+      animation: heartGlowPulse 3.8s ease-in-out infinite alternate;
+    }
+
+    @keyframes heartGlowPulse {
+      0% { transform: scale(0.82); opacity: 0.6; }
+      50% { transform: scale(1.08); opacity: 0.85; filter: blur(58px); }
+      100% { transform: scale(1.22); opacity: 1; filter: blur(48px); }
+    }
+
+    /* SVG Multi-Layer Neon Crystal Heart */
+    .heart-svg-wrapper {
+      position: absolute;
+      width: min(370px, 48vw);
+      height: min(370px, 48vw);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      z-index: 20;
+      filter: drop-shadow(0 0 25px rgba(255, 42, 133, 0.75)) drop-shadow(0 0 50px rgba(0, 229, 255, 0.45));
+    }
+
+    .heart-svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    /* Glassmorphism Crystal Fill */
+    .heart-crystal-fill {
+      fill: url(#heartCrystalGrad);
+      opacity: 0;
+      transition: opacity 2.8s ease;
+    }
+    .heart-svg-wrapper.drawn .heart-crystal-fill {
+      opacity: 1;
+    }
+
+    /* Outer Radiant Magenta Aurora Glow */
+    .heart-neon-outer {
+      fill: none;
+      stroke: url(#neonHeartGrad);
+      stroke-width: 9px;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      filter: blur(10px);
+      opacity: 0.9;
+      stroke-dasharray: 1200;
+      stroke-dashoffset: 1200;
+      transition: stroke-dashoffset 2.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Mid Vibrant Hot Pink & Rose Neon Line */
+    .heart-neon-mid {
+      fill: none;
+      stroke: #ff2a85;
+      stroke-width: 4.8px;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      filter: drop-shadow(0 0 16px #ff2a85) drop-shadow(0 0 35px #ff1493);
+      stroke-dasharray: 1200;
+      stroke-dashoffset: 1200;
+      transition: stroke-dashoffset 2.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Inner Diamond White/Cyan Laser Core */
+    .heart-neon-core {
+      fill: none;
+      stroke: #ffffff;
+      stroke-width: 2.2px;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      filter: drop-shadow(0 0 6px #00e5ff) drop-shadow(0 0 12px #ffffff);
+      stroke-dasharray: 1200;
+      stroke-dashoffset: 1200;
+      transition: stroke-dashoffset 2.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Inner Concentric Nested Heart */
+    .heart-neon-inner-ring {
+      fill: none;
+      stroke: rgba(0, 229, 255, 0.65);
+      stroke-width: 1.6px;
+      stroke-dasharray: 6, 8;
+      filter: drop-shadow(0 0 8px #00e5ff);
+      opacity: 0;
+      transition: opacity 2s ease 1s;
+    }
+    .heart-svg-wrapper.drawn .heart-neon-inner-ring {
+      opacity: 0.85;
+    }
+
+    /* Flowing Laser Beam running continuously along the heart border */
+    .heart-laser-beam {
+      fill: none;
+      stroke: #ffffff;
+      stroke-width: 3.5px;
+      stroke-linecap: round;
+      filter: drop-shadow(0 0 10px #00e5ff) drop-shadow(0 0 20px #ff2a85);
+      stroke-dasharray: 50 1150;
+      stroke-dashoffset: 1200;
+      opacity: 0;
+    }
+    .heart-svg-wrapper.drawn .heart-laser-beam {
+      opacity: 1;
+      animation: laserBorderLoop 3.6s linear infinite;
+    }
+
+    @keyframes laserBorderLoop {
+      0% { stroke-dashoffset: 1200; }
+      100% { stroke-dashoffset: 0; }
+    }
+
+    .heart-svg-wrapper.drawn .heart-neon-outer,
+    .heart-svg-wrapper.drawn .heart-neon-mid,
+    .heart-svg-wrapper.drawn .heart-neon-core {
+      stroke-dashoffset: 0;
+    }
+
+    /* True Anatomical "Lub-Dub" Living Heartbeat */
+    .heart-svg-wrapper.pulsing {
+      animation: heartBeatLiving 2.2s cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
+    }
+
+    @keyframes heartBeatLiving {
+      0% { 
+        transform: scale(1); 
+        filter: drop-shadow(0 0 25px rgba(255, 42, 133, 0.75)) drop-shadow(0 0 45px rgba(0, 229, 255, 0.4)); 
+      }
+      12% { 
+        transform: scale(1.09); 
+        filter: drop-shadow(0 0 40px rgba(255, 42, 133, 0.95)) drop-shadow(0 0 70px rgba(0, 229, 255, 0.7)); 
+      }
+      24% { 
+        transform: scale(0.98); 
+      }
+      38% { 
+        transform: scale(1.15); 
+        filter: drop-shadow(0 0 55px rgba(255, 42, 133, 1)) drop-shadow(0 0 95px rgba(0, 229, 255, 0.9)); 
+      }
+      65% { 
+        transform: scale(1); 
+        filter: drop-shadow(0 0 25px rgba(255, 42, 133, 0.75)) drop-shadow(0 0 45px rgba(0, 229, 255, 0.4)); 
+      }
+      100% { 
+        transform: scale(1); 
+      }
+    }
+
+    /* ==================== 3D GALAXY PLANET NODES ==================== */
+    #galaxy-nodes-container {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .galaxy-planet-node {
+      position: absolute;
+      top: 0;
+      left: 0;
+      pointer-events: auto;
+      cursor: pointer;
+      transform-origin: center center;
+      will-change: transform, opacity, z-index;
+      transition: filter 0.3s ease;
+    }
+
+    .planet-bubble {
+      position: relative;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      overflow: hidden;
+      background: #0f041e;
+      border: 2px solid rgba(255, 255, 255, 0.9);
+      box-shadow: 0 0 16px #ff2a85, 0 0 32px rgba(0, 229, 255, 0.7), 0 4px 15px rgba(0, 0, 0, 0.8);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .planet-bubble img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      pointer-events: none;
+    }
+
+    /* Hover & Active Photo Effect */
+    .galaxy-planet-node:hover {
+      z-index: 1000 !important;
+    }
+
+    .galaxy-planet-node:hover .planet-bubble {
+      transform: scale(1.35) !important;
+      border-color: #ffd700;
+      box-shadow: 0 0 25px #ffd700, 0 0 50px #ff2a85, 0 0 70px #00e5ff;
+    }
+
+    /* Floating caption tooltip */
+    .planet-tooltip {
+      position: absolute;
+      bottom: calc(100% + 10px);
+      left: 50%;
+      transform: translateX(-50%) translateY(8px);
+      background: rgba(15, 3, 30, 0.94);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 215, 0, 0.75);
+      padding: 6px 14px;
+      border-radius: 20px;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.8), 0 0 15px rgba(255, 42, 133, 0.6);
+      transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      z-index: 1001;
+    }
+
+    .galaxy-planet-node:hover .planet-tooltip {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ==================== CENTER MINI ENVELOPE / PLAY TRIGGER ==================== */
+    .center-interactive-trigger {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 72px;
+      height: 72px;
+      z-index: 35;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      pointer-events: auto;
+    }
+
+    /* Glowing Ripple Rings */
+    .mini-ripple {
+      position: absolute;
+      inset: -8px;
+      border-radius: 20px;
+      border: 2px solid rgba(255, 42, 133, 0.75);
+      box-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
+      pointer-events: none;
+      animation: miniRippleAnim 2.8s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
+    }
+
+    .mini-ripple:nth-child(2) { animation-delay: 0.9s; }
+    .mini-ripple:nth-child(3) { animation-delay: 1.8s; }
+
+    @keyframes miniRippleAnim {
+      0% { transform: scale(0.7); opacity: 1; border-radius: 12px; }
+      100% { transform: scale(2.4); opacity: 0; border-radius: 24px; }
+    }
+
+    /* Mini Neon Envelope Card inside Heart */
+    .center-mini-envelope {
+      position: relative;
+      width: 58px;
+      height: 38px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, rgba(236, 72, 153, 0.9) 0%, rgba(168, 85, 247, 0.9) 100%);
+      border: 2px solid rgba(255, 255, 255, 0.95);
+      box-shadow: 0 0 20px #ff2a85, 0 0 35px rgba(0, 229, 255, 0.75);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .center-interactive-trigger:hover .center-mini-envelope {
+      transform: scale(1.18);
+      box-shadow: 0 0 30px #ff2a85, 0 0 50px #00e5ff;
+    }
+
+    .center-interactive-trigger:active .center-mini-envelope {
+      transform: scale(0.92);
+    }
+
+    .mini-envelope-heart {
+      width: 14px;
+      height: 14px;
+      fill: #ffffff;
+      filter: drop-shadow(0 0 6px #ffffff) drop-shadow(0 0 10px #ff2a85);
+      animation: miniHeartBeat 1.5s ease-in-out infinite;
+    }
+
+    @keyframes miniHeartBeat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.25); }
+    }
+
+    /* ==================== INTRO SCREEN (NEON ENVELOPE) ==================== */
+    .intro-curtain {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at 18% 20%, rgba(245, 158, 11, 0.2) 0%, transparent 45%),
+                  radial-gradient(circle at 50% 50%, #15062a 0%, #080213 55%, #020006 100%);
+      z-index: 300;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: opacity 0.9s cubic-bezier(0.4, 0, 0.2, 1), transform 0.9s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.9s;
+    }
+
+    .intro-curtain.hidden {
+      opacity: 0;
+      transform: scale(1.1);
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .intro-envelope-card {
+      position: relative;
+      width: min(340px, 82vw);
+      height: min(210px, 50vw);
+      border-radius: 28px;
+      background: linear-gradient(145deg, rgba(236, 72, 153, 0.25) 0%, rgba(168, 85, 247, 0.18) 100%);
+      border: 3.5px solid #ff2a85;
+      box-shadow: 
+        0 0 20px #00e5ff, 
+        0 0 45px #ff2a85, 
+        0 0 80px rgba(236, 72, 153, 0.4),
+        inset 0 0 35px rgba(255, 42, 133, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      animation: envelopeCardFloat 3.5s ease-in-out infinite alternate;
+    }
+
+    .intro-envelope-card:hover {
+      transform: scale(1.06);
+      box-shadow: 
+        0 0 30px #00e5ff, 
+        0 0 65px #ff2a85, 
+        0 0 100px rgba(0, 229, 255, 0.6),
+        inset 0 0 45px rgba(255, 42, 133, 0.6);
+    }
+
+    @keyframes envelopeCardFloat {
+      0% { transform: translateY(0px); }
+      100% { transform: translateY(-10px); }
+    }
+
+    .envelope-lines-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .envelope-line {
+      fill: none;
+      stroke: rgba(255, 42, 133, 0.7);
+      stroke-width: 2px;
+      stroke-linecap: round;
+      filter: drop-shadow(0 0 8px #ff2a85);
+    }
+
+    .intro-envelope-heart {
+      position: relative;
+      width: 58px;
+      height: 58px;
+      fill: #ffffff;
+      filter: drop-shadow(0 0 12px #ffffff) drop-shadow(0 0 25px #ff2a85) drop-shadow(0 0 45px #00e5ff);
+      z-index: 10;
+      animation: introHeartPulse 1.8s ease-in-out infinite;
+    }
+
+    @keyframes introHeartPulse {
+      0%, 100% { transform: scale(1); }
+      14% { transform: scale(1.14); }
+      28% { transform: scale(0.96); }
+      42% { transform: scale(1.1); }
+    }
+
+    /* ==================== PHOTO LIGHTBOX MODAL ==================== */
+    .photo-lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(3, 1, 8, 0.88);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      z-index: 250;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transform: scale(0.85);
+      transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .photo-lightbox.active {
+      opacity: 1;
+      visibility: visible;
+      transform: scale(1);
+    }
+
+    .lightbox-card {
+      position: relative;
+      max-width: min(520px, 90vw);
+      max-height: min(650px, 82vh);
+      border-radius: 24px;
+      overflow: hidden;
+      background: #0d031c;
+      border: 2px solid rgba(255, 255, 255, 0.85);
+      box-shadow: 0 0 35px #ff2a85, 0 0 70px rgba(0, 229, 255, 0.4), 0 20px 50px rgba(0, 0, 0, 0.9);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .lightbox-img-wrapper {
+      width: 100%;
+      max-height: min(500px, 68vh);
+      overflow: hidden;
+      background: #000;
+    }
+
+    .lightbox-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .lightbox-info {
+      padding: 16px 22px;
+      background: linear-gradient(180deg, rgba(20, 5, 40, 0.9) 0%, rgba(10, 2, 22, 0.98) 100%);
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      text-align: center;
+    }
+
+    .lightbox-caption {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 18px;
+      font-weight: 600;
+      color: #ffd700;
+      text-shadow: 0 0 12px rgba(255, 215, 0, 0.6);
+      margin-bottom: 4px;
+    }
+
+    .lightbox-subtext {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .lightbox-close-btn {
+      position: absolute;
+      top: -16px;
+      right: -16px;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: #ff2a85;
+      border: 2px solid #ffffff;
+      color: #ffffff;
+      font-size: 18px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 0 20px #ff2a85, 0 4px 15px rgba(0, 0, 0, 0.5);
+      transition: all 0.3s ease;
+      z-index: 10;
+    }
+
+    .lightbox-close-btn:hover {
+      transform: scale(1.15) rotate(90deg);
+      background: #00e5ff;
+      box-shadow: 0 0 25px #00e5ff;
+    }
+
+    /* ==================== VIDEO MODAL ==================== */
+    .video-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.96);
+      z-index: 280;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transform: scale(0.4);
+      transition: all 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .video-modal.active {
+      opacity: 1;
+      visibility: visible;
+      transform: scale(1);
+    }
+
+    .video-box {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      max-width: 1200px;
+      max-height: 90vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border-radius: 20px;
+    }
+
+    .video-player {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .video-close-btn {
+      position: absolute;
+      top: 24px;
+      right: 28px;
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1.5px solid rgba(255, 255, 255, 0.4);
+      color: #fff;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 300;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+    }
+
+    .video-close-btn:hover {
+      background: #ff2a85;
+      transform: rotate(90deg) scale(1.1);
+      box-shadow: 0 0 25px #ff2a85;
+    }
+
+    /* Mobile adjustments */
+    @media (max-width: 600px) {
+      .top-bar { top: 16px; left: 18px; right: 18px; }
+      .bottom-lyrics-wrapper { bottom: 25px; left: 16px; right: 16px; }
+      .lyric-phrase { font-size: 19px; }
+      .planet-bubble { width: 40px; height: 40px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Cosmic Background Nebula -->
+  <div class="cosmic-nebula"></div>
+
+  <!-- Space Canvas (Twinkle Stars & Shooting Stars) -->
+  <canvas id="space-canvas"></canvas>
+
+  <!-- 3D Galaxy Orbit Tracks Canvas -->
+  <canvas id="galaxy-canvas"></canvas>
+
+  <!-- Particle Explosion Canvas -->
+  <canvas id="explosion-canvas"></canvas>
+
+  <!-- ==================== MAIN WEB VIEWPORT ==================== -->
+  <div class="web-viewport">
+    
+    <!-- Top Bar -->
+    <header class="top-bar">
+      <div class="status-tag">
+        <span class="pulsing-dot"></span>
+        <span>Ngân Hà Tình Yêu ✨</span>
+      </div>
+
+      <button class="audio-btn" id="audioToggleBtn" title="Bật/Tắt Âm Nhạc & Zing MP3" aria-label="Bật/Tắt Âm Nhạc">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+        </svg>
+      </button>
+
+      <!-- Floating Zing MP3 Embed Widget -->
+      <div class="zing-player-panel" id="zingPlayerPanel">
+        <iframe class="zing-iframe" id="zingIframe" scrolling="no" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+      </div>
+    </header>
+
+    <!-- 3D Galaxy Stage with True Orbit Geometry -->
+    <main class="galaxy-3d-stage" id="galaxyStage">
+      
+      <!-- Heart Center Bloom -->
+      <div class="heart-core-bloom"></div>
+
+      <!-- SVG Multi-Layer Neon Crystal Heart -->
+      <div class="heart-svg-wrapper" id="heartSvgWrapper">
+        <svg class="heart-svg" viewBox="0 0 100 100">
+          <defs>
+            <linearGradient id="neonHeartGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#ff007f" />
+              <stop offset="35%" stop-color="#ff2a85" />
+              <stop offset="70%" stop-color="#00e5ff" />
+              <stop offset="100%" stop-color="#a855f7" />
+            </linearGradient>
+            <radialGradient id="heartCrystalGrad" cx="50%" cy="45%" r="55%">
+              <stop offset="0%" stop-color="rgba(255, 255, 255, 0.18)" />
+              <stop offset="45%" stop-color="rgba(255, 42, 133, 0.12)" />
+              <stop offset="85%" stop-color="rgba(0, 229, 255, 0.05)" />
+              <stop offset="100%" stop-color="transparent" />
+            </radialGradient>
+          </defs>
+
+          <!-- Crystal Glass Fill -->
+          <path class="heart-crystal-fill" d="M 50,26 C 44,12 28,4 14,16 C 0,28 4,52 50,92 C 96,52 100,28 86,16 C 72,4 56,12 50,26 Z" />
+
+          <!-- Inner Concentric Dotted Heart Ring -->
+          <path class="heart-neon-inner-ring" d="M 50,33 C 45,22 33,16 23,25 C 12,34 15,53 50,83 C 85,53 88,34 77,25 C 67,16 55,22 50,33 Z" />
+
+          <!-- Outer Radiant Aurora Glow -->
+          <path class="heart-neon-outer" d="M 50,26 C 44,12 28,4 14,16 C 0,28 4,52 50,92 C 96,52 100,28 86,16 C 72,4 56,12 50,26 Z" />
+
+          <!-- Mid Hot Pink Neon Line -->
+          <path class="heart-neon-mid" d="M 50,26 C 44,12 28,4 14,16 C 0,28 4,52 50,92 C 96,52 100,28 86,16 C 72,4 56,12 50,26 Z" />
+
+          <!-- Inner Diamond White/Cyan Laser Line -->
+          <path class="heart-neon-core" d="M 50,26 C 44,12 28,4 14,16 C 0,28 4,52 50,92 C 96,52 100,28 86,16 C 72,4 56,12 50,26 Z" />
+
+          <!-- Continuous Flowing Laser Pulse -->
+          <path class="heart-laser-beam" d="M 50,26 C 44,12 28,4 14,16 C 0,28 4,52 50,92 C 96,52 100,28 86,16 C 72,4 56,12 50,26 Z" />
+        </svg>
+      </div>
+
+      <!-- Container for dynamically rendered 3D Galaxy Photo Nodes -->
+      <div id="galaxy-nodes-container"></div>
+
+      <!-- Center Mini Neon Envelope / Play Trigger -->
+      <div class="center-interactive-trigger" id="centerTrigger" title="Chạm để mở Video kỷ niệm">
+        <div class="mini-ripple"></div>
+        <div class="mini-ripple"></div>
+        <div class="mini-ripple"></div>
+        <div class="center-mini-envelope">
+          <svg class="mini-envelope-heart" viewBox="0 0 24 24">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+          </svg>
+        </div>
+      </div>
+
+  </div>
+
+  <!-- ==================== INTRO SCREEN (NEON ENVELOPE) ==================== -->
+  <div class="intro-curtain" id="introCurtain">
+    <div class="intro-envelope-card">
+      <svg class="envelope-lines-svg" viewBox="0 0 340 210" preserveAspectRatio="none">
+        <path class="envelope-line" d="M 0,0 L 170,115 L 340,0" />
+        <path class="envelope-line" d="M 0,210 L 125,95" />
+        <path class="envelope-line" d="M 340,210 L 215,95" />
+      </svg>
+      <svg class="intro-envelope-heart" viewBox="0 0 24 24">
+        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- ==================== PHOTO LIGHTBOX MODAL ==================== -->
+  <div class="photo-lightbox" id="photoLightbox">
+    <div class="lightbox-card" id="lightboxCard">
+      <button class="lightbox-close-btn" id="lightboxCloseBtn" title="Đóng">✕</button>
+      <div class="lightbox-img-wrapper">
+        <img src="" alt="Kỷ niệm" class="lightbox-img" id="lightboxImg">
+      </div>
+      <div class="lightbox-info">
+        <div class="lightbox-caption" id="lightboxCaption">Khoảnh khắc ngọt ngào ✨</div>
+        <div class="lightbox-subtext">Kỷ niệm đẹp được lưu giữ mãi mãi ❤️</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== FULLSCREEN VIDEO MODAL ==================== -->
+  <div class="video-modal" id="videoModal">
+    <button class="video-close-btn" id="videoCloseBtn" title="Đóng Video">✕</button>
+    <div class="video-box">
+      <video class="video-player" id="videoPlayer" playsinline preload="auto" controls>
+        <!-- video src assigned in CONFIG -->
+      </video>
+    </div>
+  </div>
+
+  <!-- ==================== JAVASCRIPT ==================== -->
+  <script>
+    /* ==========================================================
+       1. CẤU HÌNH CONFIG (DỄ DÀNG TUỲ BIẾN)
+       - ĐỔI NHẠC: Điền tên file mp3 (vd: "nhac.mp3") hoặc link nhạc online vào audioSrc bên dưới.
+       - THÊM/BỚT ẢNH: Chỉ cần xóa hoặc thêm tên file trong danh sách images bên dưới (hệ thống tự tính toán quỹ đạo 3D cho bất kỳ số lượng ảnh nào).
+       ========================================================== */
+    const CONFIG = {
+      // 1. Đường dẫn file Video
+      videoSrc: "37e98ab4-3fcb-42f8-b5d2-dc07af59d4bd.mp4",
+
+      // 2. File Nhạc MP3 có sẵn trong folder
+      audioSrc: "Biển Đảo Và Em (Remix).mp3", 
+
+      // 3. Link nhúng Zing MP3 (để trống vì đã có file mp3 cục bộ siêu mượt)
+      zingEmbedUrl: "", 
+
+      // 4. Danh sách ảnh (18 hoặc 20 ảnh tuỳ thích - tự động co dãn quỹ đạo)
+      images: [
+        "04c4d043-ebb8-464e-b719-47975ff7421b.jfif",
+        "1b16825f-2d44-4da4-9efa-18a4385eb6d1.jfif",
+        "2543c57f-c081-474e-8f9c-fff0f5622c88.jfif",
+        "2aafbcce-c764-4f9a-8778-be228ee15a56.jfif",
+        "2ff694b7-6e53-4523-b9a4-4a2b6f8d06e1.jfif",
+        "3686bcdb-9eb7-4501-9989-53539211b954.jfif",
+        "394d3a8f-237c-42f1-a134-5280f8d15a57.jfif",
+        "397590a0-25ec-4a78-b982-6df8a5692ade.jfif",
+        "52972775-5e5a-464a-be55-c637a2d86a44.jfif",
+        "58654f4d-cccb-4165-b520-10a42bf14e24.jfif",
+        "720e22c7-9a77-4353-8475-bde143f0656c.jfif",
+        "79d80989-2ff4-44b5-baee-b08e73601994.jfif",
+        "7c17edb5-11b7-448c-a173-8acd3664858b.jfif",
+        "9bdab617-32d2-4e56-becc-b5fb1d837a8a.jfif",
+        "ae361672-17ce-4dbd-9946-8aa53b7d0b26.jfif",
+        "b23784b2-ccec-456e-a040-2de93a61cbbc.jfif",
+        "bbfb1fe1-d280-4161-9e8e-371c791b75d3.jfif",
+        "c60c5c92-830a-4f70-b826-81b856aab484.jfif"
+      ],
+
+      // 4. Caption tương ứng cho từng ảnh
+      captions: [
+        "Khoảnh khắc ngọt ngào ✨",
+        "Nụ cười rạng rỡ 💖",
+        "Từng giây phút bên nhau 🌸",
+        "Mỗi ngày đều là kỷ niệm 💫",
+        "Ánh mắt ngập tràn yêu thương 🌟",
+        "Bình yên là khi có em 🍀",
+        "Nắm tay đi qua muôn nơi ✈️",
+        "Trọn vẹn từng khoảnh khắc 💌",
+        "Nắng ấm trong tim ☀️",
+        "Dịu dàng như giấc mơ 🌙",
+        "Mãi mãi một tình yêu 🌹",
+        "Bên nhau bình yên 🌿",
+        "Gửi ngàn lời thương nhớ 🎀",
+        "Hạnh phúc giản đơn ☕",
+        "Cùng nhau già đi nhé 💍",
+        "Xinh đẹp trong từng khung hình ✨",
+        "Yêu thương không bao giờ vơi 💓",
+        "Thế giới thu nhỏ trong mắt em 🌍"
+      ]
+    };
+
+    /* ==========================================================
+       2. CANVAS STARFIELD & SHOOTING STARS
+       ========================================================== */
+    const spaceCanvas = document.getElementById('space-canvas');
+    const spaceCtx = spaceCanvas.getContext('2d');
+    let stars = [];
+    let shootingStars = [];
+
+    function resizeSpace() {
+      spaceCanvas.width = window.innerWidth;
+      spaceCanvas.height = window.innerHeight;
+      initStars();
+    }
+
+    function initStars() {
+      stars = [];
+      const count = Math.floor((window.innerWidth * window.innerHeight) / 2000);
+      for (let i = 0; i < count; i++) {
+        stars.push({
+          x: Math.random() * window.innerWidth,
+          y: Math.random() * window.innerHeight,
+          size: Math.random() * 1.8 + 0.4,
+          alpha: Math.random() * 0.85 + 0.15,
+          speed: Math.random() * 0.03 + 0.01,
+          phase: Math.random() * Math.PI * 2,
+          color: ['#ffffff', '#ffb6c1', '#00e5ff', '#ff80bf', '#ffd700'][Math.floor(Math.random() * 5)]
+        });
+      }
+    }
+
+    function createShootingStar() {
+      if (shootingStars.length < 2 && Math.random() < 0.025) {
+        shootingStars.push({
+          x: Math.random() * window.innerWidth * 0.85 + window.innerWidth * 0.1,
+          y: Math.random() * window.innerHeight * 0.4,
+          length: Math.random() * 110 + 60,
+          speed: Math.random() * 9 + 7,
+          angle: (Math.PI / 4) + (Math.random() * 0.15 - 0.07),
+          alpha: 1,
+          decay: Math.random() * 0.02 + 0.015
+        });
+      }
+    }
+
+    function renderStarfield() {
+      spaceCtx.clearRect(0, 0, spaceCanvas.width, spaceCanvas.height);
+
+      stars.forEach(s => {
+        s.phase += s.speed;
+        const currentAlpha = s.alpha * (0.5 + 0.5 * Math.sin(s.phase));
+        spaceCtx.beginPath();
+        spaceCtx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+        spaceCtx.fillStyle = s.color;
+        spaceCtx.globalAlpha = Math.max(0.1, Math.min(1, currentAlpha));
+        spaceCtx.shadowBlur = s.size > 1.2 ? 6 : 0;
+        spaceCtx.shadowColor = s.color;
+        spaceCtx.fill();
+      });
+
+      createShootingStar();
+      for (let i = shootingStars.length - 1; i >= 0; i--) {
+        const ss = shootingStars[i];
+        const tailX = ss.x - Math.cos(ss.angle) * ss.length;
+        const tailY = ss.y - Math.sin(ss.angle) * ss.length;
+
+        const grad = spaceCtx.createLinearGradient(ss.x, ss.y, tailX, tailY);
+        grad.addColorStop(0, `rgba(255, 255, 255, ${ss.alpha})`);
+        grad.addColorStop(0.3, `rgba(255, 42, 133, ${ss.alpha * 0.8})`);
+        grad.addColorStop(0.7, `rgba(0, 229, 255, ${ss.alpha * 0.5})`);
+        grad.addColorStop(1, 'rgba(168, 85, 247, 0)');
+
+        spaceCtx.beginPath();
+        spaceCtx.moveTo(ss.x, ss.y);
+        spaceCtx.lineTo(tailX, tailY);
+        spaceCtx.strokeStyle = grad;
+        spaceCtx.lineWidth = 2.2;
+        spaceCtx.lineCap = 'round';
+        spaceCtx.shadowBlur = 15;
+        spaceCtx.shadowColor = '#ff2a85';
+        spaceCtx.stroke();
+
+        ss.x += Math.cos(ss.angle) * ss.speed;
+        ss.y += Math.sin(ss.angle) * ss.speed;
+        ss.alpha -= ss.decay;
+
+        if (ss.alpha <= 0 || ss.x > window.innerWidth + 100 || ss.y > window.innerHeight + 100) {
+          shootingStars.splice(i, 1);
+        }
+      }
+
+      spaceCtx.shadowBlur = 0;
+      spaceCtx.globalAlpha = 1;
+      requestAnimationFrame(renderStarfield);
+    }
+
+    window.addEventListener('resize', resizeSpace);
+    resizeSpace();
+    requestAnimationFrame(renderStarfield);
+
+    /* ==========================================================
+       3. 3D GALAXY VORTEX ENGINE (THIÊN HÀ XOAY 3D ĐA TẦNG)
+       ========================================================== */
+    const galaxyCanvas = document.getElementById('galaxy-canvas');
+    const galaxyCtx = galaxyCanvas.getContext('2d');
+    const nodesContainer = document.getElementById('galaxy-nodes-container');
+
+    function resizeGalaxy() {
+      galaxyCanvas.width = window.innerWidth;
+      galaxyCanvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeGalaxy);
+    resizeGalaxy();
+
+    // 3 nhánh quỹ đạo không gian 3 chiều
+    const orbits = [
+      { rx: () => Math.min(340, window.innerWidth * 0.38), ry: () => Math.min(190, window.innerHeight * 0.26), tiltX: 0.72, tiltZ: -0.45, speed: 0.007 },
+      { rx: () => Math.min(480, window.innerWidth * 0.46), ry: () => Math.min(240, window.innerHeight * 0.32), tiltX: 0.78, tiltZ: 0.55, speed: -0.005 },
+      { rx: () => Math.min(620, window.innerWidth * 0.54), ry: () => Math.min(290, window.innerHeight * 0.38), tiltX: 0.65, tiltZ: -0.15, speed: 0.0035 }
+    ];
+
+    let planetNodes = [];
+    let isGalaxyPaused = false;
+    let globalRotationAngle = 0;
+
+    // Tự động phân bổ đều mọi số lượng ảnh vào 3 tầng quỹ đạo
+    function initGalaxyNodes() {
+      nodesContainer.innerHTML = '';
+      planetNodes = [];
+      const totalImages = CONFIG.images.length;
+      if (totalImages === 0) return;
+
+      const count1 = Math.max(1, Math.round(totalImages * 0.28));
+      const count2 = Math.max(1, Math.round(totalImages * 0.36));
+      const count3 = Math.max(1, totalImages - count1 - count2);
+      const counts = [count1, count2, count3];
+
+      let currentImgIdx = 0;
+      orbits.forEach((orbit, oIdx) => {
+        const orbitCount = counts[oIdx];
+        for (let i = 0; i < orbitCount; i++) {
+          if (currentImgIdx >= totalImages) break;
+          const imgIdx = currentImgIdx;
+          const imgSrc = CONFIG.images[imgIdx];
+          const caption = CONFIG.captions[imgIdx % CONFIG.captions.length] || "Khoảnh khắc ngọt ngào ✨";
+
+          const nodeEl = document.createElement('div');
+          nodeEl.className = 'galaxy-planet-node';
+
+          const bubble = document.createElement('div');
+          bubble.className = 'planet-bubble';
+
+          const img = document.createElement('img');
+          img.src = imgSrc;
+          img.alt = caption;
+          img.loading = 'lazy';
+
+          const tooltip = document.createElement('div');
+          tooltip.className = 'planet-tooltip';
+          tooltip.textContent = caption;
+
+          bubble.appendChild(img);
+          nodeEl.appendChild(bubble);
+          nodeEl.appendChild(tooltip);
+          nodesContainer.appendChild(nodeEl);
+
+          nodeEl.addEventListener('mouseenter', () => { isGalaxyPaused = true; });
+          nodeEl.addEventListener('mouseleave', () => { isGalaxyPaused = false; });
+          nodeEl.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openPhotoLightbox(imgSrc, caption);
+          });
+
+          planetNodes.push({
+            el: nodeEl,
+            orbitIndex: oIdx,
+            angleOffset: (i / orbitCount) * Math.PI * 2,
+            imgSrc: imgSrc,
+            caption: caption
+          });
+
+          currentImgIdx++;
+        }
+      });
+    }
+
+    function project3D(theta, rx, ry, tiltX, tiltZ) {
+      const x0 = rx * Math.cos(theta);
+      const y0 = ry * Math.sin(theta);
+      const z0 = 0;
+
+      const y1 = y0 * Math.cos(tiltX) - z0 * Math.sin(tiltX);
+      const z1 = y0 * Math.sin(tiltX) + z0 * Math.cos(tiltX);
+
+      const x2 = x0 * Math.cos(tiltZ) - y1 * Math.sin(tiltZ);
+      const y2 = x0 * Math.sin(tiltZ) + y1 * Math.cos(tiltZ);
+      const z2 = z1;
+
+      return { x: x2, y: y2, z: z2 };
+    }
+
+    function renderGalaxyTracks() {
+      galaxyCtx.clearRect(0, 0, galaxyCanvas.width, galaxyCanvas.height);
+      const cx = galaxyCanvas.width / 2;
+      const cy = galaxyCanvas.height / 2;
+
+      orbits.forEach((orbit, oIdx) => {
+        const rx = orbit.rx();
+        const ry = orbit.ry();
+        const steps = 90;
+
+        galaxyCtx.beginPath();
+        for (let i = 0; i <= steps; i++) {
+          const theta = (i / steps) * Math.PI * 2;
+          const p = project3D(theta, rx, ry, orbit.tiltX, orbit.tiltZ);
+          const screenX = cx + p.x;
+          const screenY = cy + p.y;
+
+          if (i === 0) galaxyCtx.moveTo(screenX, screenY);
+          else galaxyCtx.lineTo(screenX, screenY);
+        }
+
+        galaxyCtx.closePath();
+        galaxyCtx.strokeStyle = oIdx === 1 ? 'rgba(0, 229, 255, 0.4)' : 'rgba(255, 42, 133, 0.45)';
+        galaxyCtx.lineWidth = 1.6;
+        galaxyCtx.setLineDash([4, 8]);
+        galaxyCtx.shadowBlur = 12;
+        galaxyCtx.shadowColor = oIdx === 1 ? '#00e5ff' : '#ff2a85';
+        galaxyCtx.stroke();
+
+        for (let j = 0; j < 12; j++) {
+          const t = ((j / 12) * Math.PI * 2) + (globalRotationAngle * (oIdx % 2 === 0 ? 1 : -1));
+          const p = project3D(t, rx, ry, orbit.tiltX, orbit.tiltZ);
+          const alpha = mapRange(p.z, -ry, ry, 0.25, 0.95);
+
+          galaxyCtx.beginPath();
+          galaxyCtx.arc(cx + p.x, cy + p.y, (p.z > 0 ? 2.5 : 1.5), 0, Math.PI * 2);
+          galaxyCtx.fillStyle = oIdx === 1 ? `rgba(0, 229, 255, ${alpha})` : `rgba(255, 215, 0, ${alpha})`;
+          galaxyCtx.shadowBlur = 8;
+          galaxyCtx.shadowColor = '#ffffff';
+          galaxyCtx.fill();
+        }
+      });
+
+      galaxyCtx.setLineDash([]);
+      galaxyCtx.shadowBlur = 0;
+    }
+
+    function mapRange(val, inMin, inMax, outMin, outMax) {
+      return outMin + (outMax - outMin) * ((val - inMin) / (inMax - inMin));
+    }
+
+    function animateGalaxy() {
+      if (!isGalaxyPaused) {
+        globalRotationAngle += 0.005;
+      }
+
+      const cx = window.innerWidth / 2;
+      const cy = window.innerHeight / 2;
+
+      planetNodes.forEach(planet => {
+        const orbit = orbits[planet.orbitIndex];
+        const theta = planet.angleOffset + (globalRotationAngle * (orbit.speed > 0 ? 1 : -1) * Math.abs(orbit.speed) * 160);
+        const p = project3D(theta, orbit.rx(), orbit.ry(), orbit.tiltX, orbit.tiltZ);
+
+        const depthFactor = mapRange(p.z, -300, 300, 0.72, 1.25);
+        const opacity = mapRange(p.z, -300, 300, 0.55, 1.0);
+        const zIndex = Math.round(mapRange(p.z, -300, 300, 12, 32));
+
+        const screenX = cx + p.x;
+        const screenY = cy + p.y;
+
+        planet.el.style.transform = `translate3d(${screenX - 25}px, ${screenY - 25}px, 0px) scale(${depthFactor})`;
+        planet.el.style.opacity = opacity;
+        planet.el.style.zIndex = zIndex;
+      });
+
+      renderGalaxyTracks();
+      requestAnimationFrame(animateGalaxy);
+    }
+
+    /* ==========================================================
+       4. PHOTO LIGHTBOX MODAL (BẤM VÀO XEM ĐƯỢC ẢNH)
+       ========================================================== */
+    const photoLightbox = document.getElementById('photoLightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+    const lightboxCaption = document.getElementById('lightboxCaption');
+    const lightboxCloseBtn = document.getElementById('lightboxCloseBtn');
+
+    function openPhotoLightbox(src, caption) {
+      lightboxImg.src = src;
+      lightboxCaption.textContent = caption;
+      photoLightbox.classList.add('active');
+      triggerHeartBurst(window.innerWidth / 2, window.innerHeight / 2);
+    }
+
+    function closePhotoLightbox() {
+      photoLightbox.classList.remove('active');
+    }
+
+    lightboxCloseBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closePhotoLightbox();
+    });
+
+    photoLightbox.addEventListener('click', (e) => {
+      if (e.target === photoLightbox) closePhotoLightbox();
+    });
+
+    /* ==========================================================
+       5. PHÁO HOA HẠT TIM (HEART BURST PARTICLES)
+       ========================================================== */
+    const expCanvas = document.getElementById('explosion-canvas');
+    const expCtx = expCanvas.getContext('2d');
+    let expParticles = [];
+
+    function resizeExp() {
+      expCanvas.width = window.innerWidth;
+      expCanvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeExp);
+    resizeExp();
+
+    function triggerHeartBurst(x, y) {
+      const count = 90;
+      const colors = ['#ff2a85', '#ff1493', '#00e5ff', '#ffd700', '#c084fc', '#ffffff'];
+
+      for (let i = 0; i < count; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const speed = Math.random() * 10 + 3;
+        expParticles.push({
+          x: x,
+          y: y,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed - (Math.random() * 2.5),
+          size: Math.random() * 16 + 6,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          alpha: 1,
+          decay: Math.random() * 0.02 + 0.015,
+          rotation: Math.random() * Math.PI * 2,
+          rotSpeed: (Math.random() - 0.5) * 0.2,
+          isHeart: Math.random() > 0.25
+        });
+      }
+    }
+
+    function drawBurstHeart(ctx, x, y, size, color, alpha, rot) {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(rot);
+      ctx.scale(size / 22, size / 22);
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.bezierCurveTo(-10, -10, -15, 5, 0, 15);
+      ctx.bezierCurveTo(15, 5, 10, -10, 0, 0);
+      ctx.fillStyle = color;
+      ctx.globalAlpha = alpha;
+      ctx.shadowBlur = 12;
+      ctx.shadowColor = color;
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function renderExplosions() {
+      expCtx.clearRect(0, 0, expCanvas.width, expCanvas.height);
+
+      for (let i = expParticles.length - 1; i >= 0; i--) {
+        const p = expParticles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.14;
+        p.vx *= 0.98;
+        p.rotation += p.rotSpeed;
+        p.alpha -= p.decay;
+
+        if (p.isHeart) {
+          drawBurstHeart(expCtx, p.x, p.y, p.size, p.color, Math.max(0, p.alpha), p.rotation);
+        } else {
+          expCtx.save();
+          expCtx.beginPath();
+          expCtx.arc(p.x, p.y, p.size / 2, 0, Math.PI * 2);
+          expCtx.fillStyle = p.color;
+          expCtx.globalAlpha = Math.max(0, p.alpha);
+          expCtx.shadowBlur = 10;
+          expCtx.shadowColor = p.color;
+          expCtx.fill();
+          expCtx.restore();
+        }
+
+        if (p.alpha <= 0 || p.y > expCanvas.height + 50) {
+          expParticles.splice(i, 1);
+        }
+      }
+
+      requestAnimationFrame(renderExplosions);
+    }
+    requestAnimationFrame(renderExplosions);
+
+    /* ==========================================================
+       6. VIDEO MODAL & CENTER MINI ENVELOPE TRIGGER
+       ========================================================== */
+    const centerTrigger = document.getElementById('centerTrigger');
+    const videoModal = document.getElementById('videoModal');
+    const videoPlayer = document.getElementById('videoPlayer');
+    const videoCloseBtn = document.getElementById('videoCloseBtn');
+
+    videoPlayer.src = CONFIG.videoSrc;
+
+    centerTrigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+
+      const rect = centerTrigger.getBoundingClientRect();
+      triggerHeartBurst(rect.left + rect.width / 2, rect.top + rect.height / 2);
+
+      setTimeout(() => {
+        videoModal.classList.add('active');
+        videoPlayer.currentTime = 0;
+        videoPlayer.play().catch(e => console.log(e));
+
+        if (bgmAudio) bgmAudio.volume = 0.2;
+        if (audioCtx && audioCtx.state === 'running') audioCtx.suspend();
+      }, 400);
+    });
+
+    function closeVideo() {
+      videoModal.classList.remove('active');
+      videoPlayer.pause();
+
+      if (bgmAudio) bgmAudio.volume = 0.7;
+      if (audioCtx && synthActive && audioCtx.state === 'suspended') audioCtx.resume();
+    }
+
+    videoCloseBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeVideo();
+    });
+
+    videoModal.addEventListener('click', (e) => {
+      if (e.target === videoModal) closeVideo();
+    });
+
+    /* ==========================================================
+       8. AUDIO & ZING MP3 EMBED ENGINE
+       ========================================================== */
+    const audioToggleBtn = document.getElementById('audioToggleBtn');
+    const zingPlayerPanel = document.getElementById('zingPlayerPanel');
+    const zingIframe = document.getElementById('zingIframe');
+    let audioCtx = null;
+    let synthActive = false;
+    let bgmAudio = null;
+
+    function initAudio() {
+      // Ưu tiên 1: Zing MP3 Embed
+      if (CONFIG.zingEmbedUrl && CONFIG.zingEmbedUrl.trim() !== '') {
+        zingIframe.src = CONFIG.zingEmbedUrl;
+        audioToggleBtn.classList.add('playing');
+        zingPlayerPanel.classList.add('active');
+        // Tự động ẩn thanh Zing MP3 sau 8s để không che giao diện (bấm nút nhạc để mở lại bất kỳ lúc nào)
+        setTimeout(() => {
+          zingPlayerPanel.classList.remove('active');
+        }, 8000);
+      }
+      // Ưu tiên 2: File MP3
+      else if (CONFIG.audioSrc && CONFIG.audioSrc.trim() !== '') {
+        bgmAudio = new Audio(CONFIG.audioSrc);
+        bgmAudio.loop = true;
+        bgmAudio.volume = 0.7;
+        bgmAudio.play().then(() => {
+          audioToggleBtn.classList.add('playing');
+        }).catch(err => console.log(err));
+      } 
+      // Ưu tiên 3: Romantic Synth Chimes
+      else {
+        startRomanticSynth();
+      }
+    }
+
+    function startRomanticSynth() {
+      if (synthActive) return;
+      try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContext();
+
+        const notes = [
+          261.63, 329.63, 392.00, 523.25,
+          293.66, 369.99, 440.00, 587.33,
+          220.00, 261.63, 329.63, 440.00,
+          349.23, 440.00, 523.25, 659.25
+        ];
+
+        let noteIndex = 0;
+        synthActive = true;
+        audioToggleBtn.classList.add('playing');
+
+        function playChime() {
+          if (!synthActive || !audioCtx || audioCtx.state === 'suspended') return;
+
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          const filter = audioCtx.createBiquadFilter();
+
+          const freq = notes[noteIndex % notes.length];
+          noteIndex++;
+
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+          filter.type = 'lowpass';
+          filter.frequency.setValueAtTime(1400, audioCtx.currentTime);
+
+          gain.gain.setValueAtTime(0.001, audioCtx.currentTime);
+          gain.gain.linearRampToValueAtTime(0.09, audioCtx.currentTime + 0.1);
+          gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 2.4);
+
+          osc.connect(filter);
+          filter.connect(gain);
+          gain.connect(audioCtx.destination);
+
+          osc.start();
+          osc.stop(audioCtx.currentTime + 2.5);
+
+          setTimeout(playChime, 600 + Math.random() * 250);
+        }
+
+        playChime();
+      } catch (e) {
+        console.warn("Audio Context init error:", e);
+      }
+    }
+
+    audioToggleBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      // Nếu đang dùng Zing MP3: Bấm nút nhạc để bật/tắt bảng điều khiển Zing MP3
+      if (CONFIG.zingEmbedUrl && CONFIG.zingEmbedUrl.trim() !== '') {
+        zingPlayerPanel.classList.toggle('active');
+        return;
+      }
+
+      if (bgmAudio) {
+        if (bgmAudio.paused) {
+          bgmAudio.play();
+          audioToggleBtn.classList.add('playing');
+        } else {
+          bgmAudio.pause();
+          audioToggleBtn.classList.remove('playing');
+        }
+      } else if (audioCtx) {
+        if (audioCtx.state === 'running') {
+          audioCtx.suspend();
+          synthActive = false;
+          audioToggleBtn.classList.remove('playing');
+        } else {
+          audioCtx.resume();
+          synthActive = true;
+          audioToggleBtn.classList.add('playing');
+          startRomanticSynth();
+        }
+      }
+    });
+
+    /* ==========================================================
+       9. INTRO SCREEN TAP TO UNLOCK
+       ========================================================== */
+    const introCurtain = document.getElementById('introCurtain');
+    const heartSvgWrapper = document.getElementById('heartSvgWrapper');
+
+    function openLoveLetter() {
+      introCurtain.classList.add('hidden');
+
+      // Khởi động Audio
+      initAudio();
+
+      // Pháo hoa nổ bung mở đầu
+      triggerHeartBurst(window.innerWidth / 2, window.innerHeight / 2);
+
+      // Vẽ nét tim neon SVG
+      setTimeout(() => {
+        heartSvgWrapper.classList.add('drawn');
+      }, 300);
+
+      // Trái tim bắt đầu đập
+      setTimeout(() => {
+        heartSvgWrapper.classList.add('pulsing');
+      }, 2900);
+
+      // Khởi tạo và chạy 3D Galaxy Vortex
+      initGalaxyNodes();
+      animateGalaxy();
+    }
+
+    introCurtain.addEventListener('click', openLoveLetter);
+    introCurtain.addEventListener('touchstart', openLoveLetter, { passive: true });
+
+  </script>
+</body>
+</html>
